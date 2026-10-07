@@ -60,11 +60,34 @@ export function initDatabase(): void {
       FOREIGN KEY (run_id) REFERENCES agent_runs(id) ON DELETE CASCADE
     );
 
+    CREATE TABLE IF NOT EXISTS case_reviews (
+      id TEXT PRIMARY KEY,
+      case_id TEXT NOT NULL,
+      workflow_status TEXT NOT NULL,
+      autonomy_mode TEXT NOT NULL,
+      recommendation TEXT,
+      confidence REAL,
+      rationale TEXT,
+      key_reasons_json TEXT,
+      agent_results_json TEXT NOT NULL,
+      execution_trace_json TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      completed_at TEXT,
+      FOREIGN KEY (case_id) REFERENCES cases(id) ON DELETE CASCADE
+    );
+
     CREATE INDEX IF NOT EXISTS idx_cases_status ON cases(status);
     CREATE INDEX IF NOT EXISTS idx_cases_risk_tier ON cases(risk_tier);
     CREATE INDEX IF NOT EXISTS idx_agent_runs_case_id ON agent_runs(case_id);
     CREATE INDEX IF NOT EXISTS idx_agent_findings_case_id ON agent_findings(case_id);
+    CREATE INDEX IF NOT EXISTS idx_case_reviews_case_id ON case_reviews(case_id);
   `);
+
+  // Backwards-compatible column additions for agent_runs audit trail
+  try { db.exec('ALTER TABLE agent_runs ADD COLUMN review_id TEXT;'); } catch (_) {}
+  try { db.exec('ALTER TABLE agent_runs ADD COLUMN step INTEGER DEFAULT 0;'); } catch (_) {}
+  try { db.exec('ALTER TABLE agent_runs ADD COLUMN retry_count INTEGER DEFAULT 0;'); } catch (_) {}
+  try { db.exec('ALTER TABLE agent_runs ADD COLUMN error TEXT;'); } catch (_) {}
 }
 
 /**

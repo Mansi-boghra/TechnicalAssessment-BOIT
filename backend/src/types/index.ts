@@ -92,12 +92,14 @@ export interface AgentRun {
   summary?: string;
 }
 
+export type AuditFindingSeverity = 'INFO' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | 'WARNING';
+
 export interface AgentFinding {
   id: string;
   runId?: string;
   caseId: string;
   agentName: string;
-  severity: 'INFO' | 'WARNING' | 'CRITICAL';
+  severity: AuditFindingSeverity;
   category: string;
   description: string;
   passed: boolean;
