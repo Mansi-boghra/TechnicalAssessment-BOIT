@@ -19,8 +19,12 @@ build/
 *.sqlite-journal
 *.sqlite-shm
 *.sqlite-wal
-data/*.db
-backend/data/*.db
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+/data/
+/backend/data/
 
 # Logs
 npm-debug.log*

@@ -136,6 +136,12 @@ GET /api/health
 }
 ```
 
+### Onboarding Cases
+
+- `GET /api/cases` — Retrieve all synthetic onboarding cases
+- `GET /api/cases/:id` — Retrieve a synthetic onboarding case by ID
+- `POST /api/cases` — Create and validate a new synthetic onboarding case payload
+
 ---
 
 ## 🛡️ Synthetic Data Policy
