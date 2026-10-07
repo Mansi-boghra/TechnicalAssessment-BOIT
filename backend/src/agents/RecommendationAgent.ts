@@ -33,6 +33,9 @@ export class RecommendationAgent extends BaseAgent<RecommendationAgentInput, Rec
     const criticalFindings = allFindings.filter((f) => f.severity === 'CRITICAL');
     const hasSanctions = allFindings.some((f) => f.code === 'RISK_SANCTIONS_MATCH');
 
+    const failedSpecialists = specialistResults.filter((s) => s.status === 'FAILED');
+    const hasFailedSpecialist = failedSpecialists.length > 0;
+
     // 2. High Severity Triggers: Manual Review Requirements
     const highFindings = allFindings.filter((f) => f.severity === 'HIGH');
     const hasMissingMandatoryDoc = allFindings.some(
@@ -68,6 +71,14 @@ export class RecommendationAgent extends BaseAgent<RecommendationAgentInput, Rec
       rationale =
         'The application is recommended for REJECTION due to critical identity or documentation failures that cannot be resolved through routine onboarding.';
       confidence = 0.95;
+    } else if (hasFailedSpecialist) {
+      recommendation = 'MANUAL_REVIEW';
+      failedSpecialists.forEach((s) => {
+        keyReasons.push(`Incomplete specialist analysis: ${s.agentName} failed during execution (${s.failureReason || 'unknown'}).`);
+      });
+      rationale =
+        'The application requires MANUAL_REVIEW. One or more specialist agents failed to complete analysis, leaving mandatory compliance checks incomplete. The system cannot approve without complete specialist verification.';
+      confidence = 0.75;
     } else if (hasMissingMandatoryDoc || hasNameMismatch || hasPep || hasHighRiskCountry || highFindings.length > 0) {
       recommendation = 'MANUAL_REVIEW';
       if (hasMissingMandatoryDoc) {

@@ -23,11 +23,16 @@ export class OnboardingOrchestrator {
   private riskIndicatorAgent: RiskIndicatorAgent;
   private recommendationAgent: RecommendationAgent;
 
-  constructor() {
-    this.documentCompletenessAgent = new DocumentCompletenessAgent();
-    this.identityConsistencyAgent = new IdentityConsistencyAgent();
-    this.riskIndicatorAgent = new RiskIndicatorAgent();
-    this.recommendationAgent = new RecommendationAgent();
+  constructor(agents?: {
+    documentCompletenessAgent?: DocumentCompletenessAgent;
+    identityConsistencyAgent?: IdentityConsistencyAgent;
+    riskIndicatorAgent?: RiskIndicatorAgent;
+    recommendationAgent?: RecommendationAgent;
+  }) {
+    this.documentCompletenessAgent = agents?.documentCompletenessAgent || new DocumentCompletenessAgent();
+    this.identityConsistencyAgent = agents?.identityConsistencyAgent || new IdentityConsistencyAgent();
+    this.riskIndicatorAgent = agents?.riskIndicatorAgent || new RiskIndicatorAgent();
+    this.recommendationAgent = agents?.recommendationAgent || new RecommendationAgent();
   }
 
   /**
