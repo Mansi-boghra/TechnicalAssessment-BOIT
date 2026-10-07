@@ -1,18 +1,10 @@
 /**
- * Multi-Agent System - Agent Definitions
- * Scaffolded for upcoming agent implementation.
- * Workflow implementation to follow in subsequent steps.
+ * Multi-Agent System - Core Onboarding Agents
  */
 
-export interface BaseAgent {
-  name: string;
-  role: string;
-  evaluate(input: unknown): Promise<unknown>;
-}
-
-// Scaffolded agents placeholder
-export const REGISTERED_AGENTS = [
-  'IdentityVerificationAgent',
-  'RiskAssessmentAgent',
-  'ComplianceScreeningAgent',
-] as const;
+export * from './types.js';
+export * from './base.js';
+export * from './DocumentCompletenessAgent.js';
+export * from './IdentityConsistencyAgent.js';
+export * from './RiskIndicatorAgent.js';
+export * from './RecommendationAgent.js';
